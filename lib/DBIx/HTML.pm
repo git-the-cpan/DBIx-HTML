@@ -1,12 +1,28 @@
+package DBIx::HTML::V1;
+use base 'DBIx::XHTML_Table', 'DBIx::HTML';
+
+package DBIx::HTML::V2;
+use base 'Spreadsheet::HTML', 'DBIx::HTML';
+
 package DBIx::HTML;
 use strict;
 use warnings FATAL => 'all';
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
-use base 'DBIx::XHTML_Table';
+use Data::Dumper;
 
-sub execute  { shift->exec_query( @_ ) }
-sub generate { shift->output( @_ ) }
+sub new {
+    my $class = shift;
+
+    if (!ref($_[0]) and $_[0] eq 'data') {
+        return DBIx::HTML::V2->new( @_ ); 
+    }
+    elsif (ref($_[0]) eq 'HASH' and exists $_[0]->{data}) {
+        return DBIx::HTML::V2->new( @_ ); 
+    }
+
+    return DBIx::HTML::V1->new( @_ ); 
+}
 
 1;
 __END__
@@ -14,30 +30,51 @@ __END__
 
 DBIx::HTML - SQL queries to HTML tables.
 
-This is a renaming of DBIx::XHTML_Table. See L<DBIx::XHTML_Table> for more information.
+This module is an adapter between the older DBIx::XHTML_Table
+and the newer Spreadsheet::HTML. It will eventually only
+leverage the latter, essentially providing HTML output while
+allowing the former to continue to provide XHTML output.
 
-=head1 SYNOPSIS
+The goal is to slowly move usage away from DBIx::XHTML_Table
+and over to DBIx::HTML/Spreadsheet::HTML while allowing
+DBIx::XHTML_Table to remain available.
+
+See L<DBIx::XHTML_Table> and L<Spreadsheet::HTML> for more information.
+
+=head1 NEW USAGE (Spreadsheet::HTML)
+
+New usage is currently limited. No database queries are executed
+on behalf of the client currently, but this will change. For now,
+focus is on allowing legacy usage to continue as-is.
+
+    my $table = DBIx::HTML->new( data => $data );
+    print $table->generate;
+    print $table->transpose;
+    print $table->reverse;
+
+=head1 LEGACY USAGE (DBIx::XHTML_Table)
+
+DBIx::HTML should be a full replacement for DBIx::XHTML_Table.
 
     use DBIx::HTML;
 
     # database credentials - fill in the blanks
     my @creds = ( $data_source, $usr, $pass );
-
     my $table = DBIx::HTML->new( @creds )
 
-    $table->execute("
+    $table->exec_query("
         select foo from bar
         where baz='qux'
         order by foo
     ");
 
-    print $table->generate;
+    print $table->output;
 
     # stackable method calls:
     print DBIx::HTML
         ->new( @creds )
-        ->execute('select foo,baz from bar')
-        ->generate;
+        ->exec_query('select foo,baz from bar')
+        ->output;
 
 =head1 METHODS
 
@@ -45,13 +82,12 @@ This is a renaming of DBIx::XHTML_Table. See L<DBIx::XHTML_Table> for more infor
 
 =item new
 
-=item execute
+If a hash or hash reference argument is present with
+a key of 'data' then new() will return a V2 object
+which is a subclass of Spreadsheet::HTML.
 
-Alias for DBIx::XHTML_Table::exec_query()
-
-=item generate
-
-Alias for DBIx::XHTML_Table::output()
+Otherwise, a V1 object will be returned, which is a 
+subclass of DBIx::XHTML_Table.
 
 =back
 
@@ -61,18 +97,30 @@ Jeff Anderson, C<< <jeffa at cpan.org> >>
 
 =head1 BUGS
 
-Please report any bugs or feature requests to C<bug-dbix-html at rt.cpan.org>, or through
-the web interface at
+Please report any bugs or feature requests to
 
-L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=DBIx-HTML>.
+=over 4
 
-I will be notified, and then you'll automatically be notified of progress on your bug as I make changes.
+=item * C<bug-dbix-html at rt.cpan.org>
+
+    Send an email.
+
+=item * L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=DBIx-HTML>
+
+    Use the web interface.
+
+=back
+
+I will be notified, and then you'll automatically be notified of progress
+on your bug as I make changes.
 
 =head1 SUPPORT
 
 You can find documentation for this module with the perldoc command.
 
     perldoc DBIx::HTML
+
+The Github project is L<https://github.com/jeffa/DBIx-HTML>
 
 You can also look for information at:
 

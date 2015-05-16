@@ -3,7 +3,8 @@ abstract: 'SQL queries to HTML tables.'
 author:
   - 'Jeff Anderson <jeffa@cpan.org>'
 build_requires:
-  DBIx::XHTML_Table: 0
+  DBIx::XHTML_Table: 1.39
+  Spreadsheet::HTML: 0.04
   Test::More: 0
 configure_requires:
   ExtUtils::MakeMaker: 0
@@ -20,4 +21,4 @@ no_index:
     - inc
 requires:
   perl: 5.006
-version: 0.01
+version: 0.02

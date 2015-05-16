@@ -22,7 +22,8 @@
    "prereqs" : {
       "build" : {
          "requires" : {
-            "DBIx::XHTML_Table" : "0",
+            "DBIx::XHTML_Table" : "1.39",
+            "Spreadsheet::HTML" : "0.04",
             "Test::More" : "0"
          }
       },
@@ -38,5 +39,5 @@
       }
    },
    "release_status" : "stable",
-   "version" : "0.01"
+   "version" : "0.02"
 }
