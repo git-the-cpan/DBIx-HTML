@@ -3,7 +3,6 @@ abstract: 'SQL queries to HTML tables.'
 author:
   - 'Jeff Anderson <jeffa@cpan.org>'
 build_requires:
-  DBIx::XHTML_Table: 1.39
   Spreadsheet::HTML: 0.04
   Test::More: 0
 configure_requires:
@@ -21,4 +20,4 @@ no_index:
     - inc
 requires:
   perl: 5.006
-version: 0.03
+version: 0.04
