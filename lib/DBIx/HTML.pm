@@ -1,7 +1,7 @@
 package DBIx::HTML;
 use strict;
 use warnings FATAL => 'all';
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 
 use DBI;
 use Carp;
@@ -10,7 +10,13 @@ use Data::Dumper;
 
 sub connect {
     my $class = shift;
-    my $self = {};
+    my $self = {
+        head        => [],
+        rows        => [],
+        dbh         => undef,
+        sth         => undef,
+        keep_alive  => undef,
+    };
 
     if (UNIVERSAL::isa( $_[0], 'DBI::db' )) {
         # use supplied db handle
@@ -31,25 +37,45 @@ sub do {
 
     carp "can't call do(): no database handle" unless $self->{dbh};
 
-    #TODO: this seems like it can be simplified
     eval {
-        $self->{sth} = UNIVERSAL::isa( $sql,'DBI::st' ) ? $sql : $self->{dbh}->prepare( $sql );
+        $self->{sth} = $self->{dbh}->prepare( $sql );
         $self->{sth}->execute( @$args );
     };
     carp $@ and return undef if $@;
 
-    $self->{spreadsheet} = Spreadsheet::HTML->new(
-        data => [
-            [ map ucfirst $_, @{ $self->{sth}{NAME} } ],
-            @{ $self->{sth}->fetchall_arrayref },
-        ]
-    );
-
+    $self->{head} = $self->{sth}{NAME};
+    $self->{rows} = $self->{sth}->fetchall_arrayref;
     return $self;
 }
 
-sub generate { shift->{spreadsheet}->generate( @_ ) }
+sub generate {
+    my $self = shift;
+    return Spreadsheet::HTML
+        ->new( data => [ $self->{head}, @{ $self->{rows} } ] )
+        ->generate( $self->{table_attrs} )
+    ;
+}
 
+sub decorate {
+    my $self = shift;
+    my %attrs = @_;
+
+    if (my $func = delete $attrs{filter_header}) {
+        $self->{head} = [ map $func->($_), @{ $self->{head} } ];
+    }
+
+    $self->{table_attrs} = {%attrs};
+    return $self;
+}
+
+
+# disconnect database handle if i created it
+sub DESTROY {
+	my $self = shift;
+	if (!$self->{keep_alive} and UNIVERSAL::isa( $self->{dbh}, 'DBI::db' )) {
+        $self->{dbh}->disconnect();
+	}
+}
 
 
 1;
@@ -72,23 +98,36 @@ DBIx::HTML - SQL queries to HTML tables.
         order by foo
     ', [ 'qux' ]);
 
+    $table->decorate( table => { border => 1 } );
+
     print $table->generate;
 
     # stackable method calls:
     print DBIx::HTML
         ->connect( @creds )
         ->do( 'select foo,baz from bar' )
+        ->decorate( table => { border => 1 } )
         ->generate;
 
 =head1 METHODS
 
 =over 4
 
-=item connect
+=item connect()
 
-=item do
+Connects to the database. See L<DBI> for how to do that.
 
-=item generate
+=item do()
+
+Executes the query.
+
+=item decorate()
+
+Specify attributes for the HTML tags in the generated table.
+
+=item generate()
+
+Produce and return the HTML table.
 
 =back
 
