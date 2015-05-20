@@ -3,13 +3,14 @@ abstract: 'SQL queries to HTML tables.'
 author:
   - 'Jeff Anderson <jeffa@cpan.org>'
 build_requires:
-  Spreadsheet::HTML: 0.04
+  DBI: 0
+  Spreadsheet::HTML: 0
   Test::More: 0
 configure_requires:
   ExtUtils::MakeMaker: 0
 dynamic_config: 1
 generated_by: 'ExtUtils::MakeMaker version 6.62, CPAN::Meta::Converter version 2.130880'
-license: unknown
+license: artistic_2
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
   version: 1.4
@@ -20,4 +21,4 @@ no_index:
     - inc
 requires:
   perl: 5.006
-version: 0.06
+version: 0.07
