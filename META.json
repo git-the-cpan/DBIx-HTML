@@ -23,7 +23,7 @@
       "build" : {
          "requires" : {
             "DBI" : "0",
-            "Spreadsheet::HTML" : "0",
+            "Spreadsheet::HTML" : "0.06",
             "Test::More" : "0"
          }
       },
@@ -39,5 +39,5 @@
       }
    },
    "release_status" : "stable",
-   "version" : "0.07"
+   "version" : "0.08"
 }
