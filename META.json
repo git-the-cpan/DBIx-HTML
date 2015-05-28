@@ -22,8 +22,7 @@
    "prereqs" : {
       "build" : {
          "requires" : {
-            "DBI" : "0",
-            "Spreadsheet::HTML" : "0.07",
+            "DBD::CSV" : "0.48",
             "Test::More" : "0"
          }
       },
@@ -34,10 +33,12 @@
       },
       "runtime" : {
          "requires" : {
+            "DBI" : "0",
+            "Spreadsheet::HTML" : "0.12",
             "perl" : "5.006"
          }
       }
    },
    "release_status" : "stable",
-   "version" : "0.09"
+   "version" : "0.10"
 }

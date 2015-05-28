@@ -1,7 +1,7 @@
 package DBIx::HTML;
 use strict;
 use warnings FATAL => 'all';
-our $VERSION = '0.09';
+our $VERSION = '0.10';
 our $AUTOLOAD;
 
 use DBI;
@@ -55,7 +55,7 @@ sub do {
 
 sub AUTOLOAD {
     my $self = shift;
-    croak "must connect() first" unless ref($self) eq __PACKAGE__;
+    croak "must connect() first" unless $self->isa( __PACKAGE__ );
     (my $method = $AUTOLOAD) =~ s/.*:://;
     croak "no such method $method for " . ref($self->{generator}) unless $self->{generator}->can( $method );
     return $self->{generator}->$method( @_ );
