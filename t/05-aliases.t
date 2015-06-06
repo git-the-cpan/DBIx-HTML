@@ -5,8 +5,8 @@ use warnings FATAL => 'all';
 use DBIx::HTML;
 use Test::More;
 
-eval "use DBD::CSV";
-plan skip_all => "DBD::CSV required" if $@;
+eval "use DBD::CSV 0.48";
+plan skip_all => "DBD::CSV 0.48 required" if $@;
 
 plan tests => 2;
 
@@ -23,8 +23,5 @@ my $table = DBIx::HTML
     ->do( 'select * from decorate' )
 ;
 
-SKIP: {
-    skip "will not work until Spreadsheet::HTML v0.13", 2;
 is $table->generate, $table->portrait,      "generate() is portrait()";
 is $table->landscape, $table->transpose,    "landscape() is transpose()";
-};

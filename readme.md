@@ -1,6 +1,6 @@
 DBIx-HTML
 =========
-SQL queries to HTML tables.
+SQL queries to HTML5 tables.
 
 See [DBIx::HTML](http://search.cpan.org/dist/DBIx-HTML/)
 and [Spreadsheet::HTML](http://search.cpan.org/dist/Spreadsheet-HTML/)
@@ -24,13 +24,13 @@ use DBIx::HTML;
 
 my $table = DBIx::HTML->connect( @db_credentials );
 $table->do( $query );
-print $table->generate;
+print $table->portrait;
 
 # stackable method calls:
 print DBIx::HTML
     ->connect( @db_credentials )
     ->do( 'select foo,baz from bar' )
-    ->generate
+    ->portrait
 ;
 ```
 

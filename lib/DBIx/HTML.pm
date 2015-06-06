@@ -1,7 +1,7 @@
 package DBIx::HTML;
 use strict;
 use warnings FATAL => 'all';
-our $VERSION = '0.10';
+our $VERSION = '0.11';
 our $AUTOLOAD;
 
 use DBI;
@@ -131,9 +131,9 @@ them internally.
 All methods from Spreadsheet::HTML are delegated. Simply call
 any one of the methods provided and supply your own arguments.
 For example, to group table rows into respective <thead>, <tbody>
-and <tfoot> sections and to remove any headings text formatting:
+and <tfoot> sections and to wrap headings with <td> instead of <tr>:
 
-  print $table->generate( tgroups => 1, headings => undef );
+  print $table->portrait( tgroups => 1, headings => undef );
 
 See L<Spreadsheet::HTML> for full documentation on these methods.
 

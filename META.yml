@@ -3,7 +3,6 @@ abstract: 'SQL queries to HTML5 tables.'
 author:
   - 'Jeff Anderson <jeffa@cpan.org>'
 build_requires:
-  DBD::CSV: 0.48
   Test::More: 0
 configure_requires:
   ExtUtils::MakeMaker: 0
@@ -20,6 +19,6 @@ no_index:
     - inc
 requires:
   DBI: 0
-  Spreadsheet::HTML: 0.12
+  Spreadsheet::HTML: 0.17
   perl: 5.006
-version: 0.10
+version: 0.11
