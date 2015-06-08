@@ -6,9 +6,6 @@ readme.md
 t/00-use.t
 t/01-run.t
 t/02-decorate.t
-t/03-transpose.t
-t/04-reverse.t
-t/05-aliases.t
 t/data/decorate.csv
 t/data/test.csv
 t/data/test_copy.csv
