@@ -33,11 +33,20 @@
       "runtime" : {
          "requires" : {
             "DBI" : "0",
-            "Spreadsheet::HTML" : "0.17",
+            "Spreadsheet::HTML" : "0.37",
             "perl" : "5.006"
          }
       }
    },
    "release_status" : "stable",
-   "version" : "0.12"
+   "resources" : {
+      "bugtracker" : {
+         "web" : "https://github.com/jeffa/DBIx-HTML/issues"
+      },
+      "homepage" : "https://github.com/jeffa/DBIx-HTML",
+      "repository" : {
+         "url" : "https://github.com/jeffa/DBIx-HTML.git"
+      }
+   },
+   "version" : "0.13"
 }

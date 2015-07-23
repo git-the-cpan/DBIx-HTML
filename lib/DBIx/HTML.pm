@@ -1,7 +1,7 @@
 package DBIx::HTML;
 use strict;
 use warnings FATAL => 'all';
-our $VERSION = '0.12';
+our $VERSION = '0.13';
 our $AUTOLOAD;
 
 use DBI;
@@ -17,7 +17,7 @@ sub connect {
         sth         => undef,
         keep_alive  => undef,
         generator   => Spreadsheet::HTML->new(
-            cache    => 1,        
+            cache    => 1,
             headings => sub { join(' ', map { ucfirst(lc($_)) } split ('_', shift)) }
         ),
     };
@@ -32,7 +32,7 @@ sub connect {
         carp $@ and return undef if $@;
     }
 
-	return bless $self, $class;
+    return bless $self, $class;
 }
 
 sub do {
@@ -61,15 +61,13 @@ sub AUTOLOAD {
     return $self->{generator}->$method( @_ );
 } 
 
-
 # disconnect database handle if i created it
 sub DESTROY {
-	my $self = shift;
-	if (!$self->{keep_alive} and $self->{dbh}->isa( 'DBI::db' )) {
+    my $self = shift;
+    if (!$self->{keep_alive} and $self->{dbh}->isa( 'DBI::db' )) {
         $self->{dbh}->disconnect();
-	}
+    }
 }
-
 
 1;
 __END__
@@ -81,16 +79,22 @@ DBIx::HTML - SQL queries to HTML5 tables.
 
     use DBIx::HTML;
 
-    my $table = DBIx::HTML->connect( @db_credentials );
-    $table->do( $query );
-    print $table->portrait( indent => "\t" );
+    my $generator = DBIx::HTML->connect( @db_credentials );
+    $generator->do( $query );
+
+    # supports mulitple orientations
+    print $generator->portrait;
+    print $generator->landscape;
 
     # stackable method calls:
     print DBIx::HTML
         ->connect( @db_credentials )
         ->do( 'select foo,baz from bar' )
-        ->landscape( encodes => '<>' )
+        ->landscape
     ;
+
+    # rotating attributes:
+    print $generator->portrait( tr => { class => [qw( odd even )] } );
 
 =head1 SYNOPSIS
 
@@ -98,9 +102,15 @@ Connect to the database and issue a query. The result will be
 an HTML5 table containing the query results wrapped in <td> tags
 and headings wrapped in <th> tags. Headings values have the first
 character in each word upper cased, with underscores replaced by
-spaces. All automatic settings can be overridden. This module uses
-Spreadsheet::HTML to generate the tables. See L<Spreadsheet::HTML>
-for further documentation on customizing the table output.
+spaces. All automatic settings can be overridden. For example,
+if you do not want the headings to be automatically styled, you
+can remove them like so:
+
+  print $generator->portrait( headings => undef );
+
+This module uses Spreadsheet::HTML to generate the tables. See
+L<Spreadsheet::HTML> for further documentation on customizing
+the table output.
 
 =head1 METHODS
 
@@ -112,7 +122,7 @@ Connects to the database. See L<DBI> for how to do that.
 Optionally, create your own database handle and pass it:
 
   my $dbh = DBI->connect ( @db_creds );
-  my $table = DBIx::HTML->connect( $dbh );
+  my $generator = DBIx::HTML->connect( $dbh );
 
   # do stuff and then finally ...
   $dbh->disconnect;
@@ -121,8 +131,7 @@ DBIx::HTML will not disconnect your database handle.
 
 =item C<do( $sql_query )>
 
-Executes the query, fetches the results and stores
-them internally.
+Executes the query, fetches the results and stores them internally.
 
 =back
 
@@ -131,9 +140,13 @@ them internally.
 All methods from Spreadsheet::HTML are delegated. Simply call
 any one of the methods provided and supply your own arguments.
 For example, to group table rows into respective <thead>, <tbody>
-and <tfoot> sections and to wrap headings with <td> instead of <tr>:
+and <tfoot> sections and to wrap headings with <td> instead of <th>:
 
-  print $table->portrait( tgroups => 1, matrix => 1 );
+  print $generator->portrait( tgroups => 1, matrix => 1 );
+
+Or have some fun:
+
+  print $generator->conway;
 
 See L<Spreadsheet::HTML> for full documentation on these methods and
 the named parameters they accept as arguments.
@@ -144,10 +157,12 @@ the named parameters they accept as arguments.
 
 =item L<Spreadsheet::HTML>
 
+The engine for this module.
+
 =item L<DBIx::XHTML_Table>
 
-The original since 2001. Can handle advanced grouping, individual cell
-value contol, rotating attributes and totals/subtotals.
+The predecessor to DBIx::HTML. If you need to generate total
+and subtotal rows, take a look at DBIx::XHTML_Table.
 
 =back
 
@@ -155,7 +170,8 @@ value contol, rotating attributes and totals/subtotals.
 
 While most functionality for this module has been completed,
 testing has not. This module has a strong dependency on
-L<Spreadsheet::HTML> which currently is also an alpha release.
+L<Spreadsheet::HTML> which although nearly complete, is also 
+currently an alpha release.
 
 You are encouraged to try my older L<DBIx::XHTML_Table> during
 the development of this module.
