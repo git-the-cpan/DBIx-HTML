@@ -1,5 +1,10 @@
 Revision history for DBIx-HTML
 
+0.14
+    - updated slug
+    - updated pod structure
+    - require minimum Spreadsheet::HTML v0.39
+
 0.13
     - added github info to Makefile
     - depend on minimum Spreadsheet::HTML version of 0.37

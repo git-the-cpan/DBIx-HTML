@@ -1,6 +1,6 @@
 DBIx-HTML
 =========
-SQL queries to HTML5 tables.
+Just another HTML table generating DBI extension.
 
 See [DBIx::HTML](http://search.cpan.org/dist/DBIx-HTML/)
 and [Spreadsheet::HTML](http://search.cpan.org/dist/Spreadsheet-HTML/)
@@ -22,16 +22,22 @@ Synopsis
 ```perl
 use DBIx::HTML;
 
-my $table = DBIx::HTML->connect( @db_credentials );
-$table->do( $query );
-print $table->portrait;
+my $generator = DBIx::HTML->connect( @db_credentials );
+$generator->do( $query );
+
+# supports mulitple orientations
+print $generator->portrait;
+print $generator->landscape;
 
 # stackable method calls:
 print DBIx::HTML
     ->connect( @db_credentials )
     ->do( 'select foo,baz from bar' )
-    ->portrait
+    ->landscape
 ;
+
+# rotating attributes:
+print $generator->portrait( tr => { class => [qw( odd even )] } );
 ```
 
 Installation

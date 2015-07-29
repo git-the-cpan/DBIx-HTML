@@ -1,7 +1,7 @@
 package DBIx::HTML;
 use strict;
 use warnings FATAL => 'all';
-our $VERSION = '0.13';
+our $VERSION = '0.14';
 our $AUTOLOAD;
 
 use DBI;
@@ -73,9 +73,9 @@ sub DESTROY {
 __END__
 =head1 NAME
 
-DBIx::HTML - SQL queries to HTML5 tables.
+DBIx::HTML - Just another HTML table generating DBI extension.
 
-=head1 USAGE
+=head1 SYNOPSIS
 
     use DBIx::HTML;
 
@@ -96,21 +96,31 @@ DBIx::HTML - SQL queries to HTML5 tables.
     # rotating attributes:
     print $generator->portrait( tr => { class => [qw( odd even )] } );
 
-=head1 SYNOPSIS
+=head1 DESCRIPTION
+
+Generate HTML tables from database queries (HTML4, XHTML and HTML5).
+Can generate landscape and other rotated views, Handsontable tables,
+checkboard patterns, and can create animations of cell values and
+backgrounds via jQuery.
 
 Connect to the database and issue a query. The result will be
-an HTML5 table containing the query results wrapped in <td> tags
-and headings wrapped in <th> tags. Headings values have the first
-character in each word upper cased, with underscores replaced by
-spaces. All automatic settings can be overridden. For example,
-if you do not want the headings to be automatically styled, you
-can remove them like so:
+an HTML HTML5 or XHTML table containing the query results wrapped
+in <td> tags and headings wrapped in <th> tags. Headings values have
+the first character in each word upper cased, with underscores replaced
+by spaces. All automatic settings can be overridden. For example, if
+you do not want the headings to be automatically styled, you can remove
+them like so:
 
   print $generator->portrait( headings => undef );
+
+  # or add your own styling
+  print $generator->portrait( headings => sub { uc shift } );
 
 This module uses Spreadsheet::HTML to generate the tables. See
 L<Spreadsheet::HTML> for further documentation on customizing
 the table output.
+
+THIS MODULE IS AN ALPHA RELEASE! Although we are very close to BETA.
 
 =head1 METHODS
 
@@ -129,9 +139,9 @@ Optionally, create your own database handle and pass it:
 
 DBIx::HTML will not disconnect your database handle.
 
-=item C<do( $sql_query )>
+=item C<do( $query )>
 
-Executes the query, fetches the results and stores them internally.
+Executes the SQL query, fetches the results and stores them internally.
 
 =back
 
@@ -140,9 +150,13 @@ Executes the query, fetches the results and stores them internally.
 All methods from Spreadsheet::HTML are delegated. Simply call
 any one of the methods provided and supply your own arguments.
 For example, to group table rows into respective <thead>, <tbody>
-and <tfoot> sections and to wrap headings with <td> instead of <th>:
+and <tfoot> sections:
 
-  print $generator->portrait( tgroups => 1, matrix => 1 );
+  print $generator->portrait( tgroups => 1 );
+
+Or perhaps you want to wrap headings with <td> instead of <th>:
+
+  print $generator->portrait( matrix => 1 );
 
 Or have some fun:
 

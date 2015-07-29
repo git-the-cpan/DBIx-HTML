@@ -1,5 +1,5 @@
 ---
-abstract: 'SQL queries to HTML5 tables.'
+abstract: 'Just another HTML table generating DBI extension.'
 author:
   - 'Jeff Anderson <jeffa@cpan.org>'
 build_requires:
@@ -19,10 +19,10 @@ no_index:
     - inc
 requires:
   DBI: 0
-  Spreadsheet::HTML: 0.37
+  Spreadsheet::HTML: 0.39
   perl: 5.006
 resources:
   bugtracker: https://github.com/jeffa/DBIx-HTML/issues
   homepage: https://github.com/jeffa/DBIx-HTML
   repository: https://github.com/jeffa/DBIx-HTML.git
-version: 0.13
+version: 0.14
