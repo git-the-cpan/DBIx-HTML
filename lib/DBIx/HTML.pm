@@ -1,7 +1,7 @@
 package DBIx::HTML;
 use strict;
 use warnings FATAL => 'all';
-our $VERSION = '0.14';
+our $VERSION = '0.15';
 our $AUTOLOAD;
 
 use DBI;
@@ -17,8 +17,7 @@ sub connect {
         sth         => undef,
         keep_alive  => undef,
         generator   => Spreadsheet::HTML->new(
-            cache    => 1,
-            headings => sub { join(' ', map { ucfirst(lc($_)) } split ('_', shift)) }
+            headings => sub { join(' ', map { ucfirst(lc($_)) } split ('_', shift || '')) }
         ),
     };
 
@@ -82,7 +81,7 @@ DBIx::HTML - Just another HTML table generating DBI extension.
     my $generator = DBIx::HTML->connect( @db_credentials );
     $generator->do( $query );
 
-    # supports mulitple orientations
+    # supports multiple orientations
     print $generator->portrait;
     print $generator->landscape;
 

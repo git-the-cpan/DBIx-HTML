@@ -33,7 +33,7 @@
       "runtime" : {
          "requires" : {
             "DBI" : "0",
-            "Spreadsheet::HTML" : "0.39",
+            "Spreadsheet::HTML" : "0.42",
             "perl" : "5.006"
          }
       }
@@ -48,5 +48,5 @@
          "url" : "https://github.com/jeffa/DBIx-HTML.git"
       }
    },
-   "version" : "0.14"
+   "version" : "0.15"
 }

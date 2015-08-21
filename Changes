@@ -1,5 +1,9 @@
 Revision history for DBIx-HTML
 
+0.15
+    - more tests (ensure presets work)
+    - require minimum Spreadsheet::HTML v0.42
+
 0.14
     - updated slug
     - updated pod structure

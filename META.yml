@@ -19,10 +19,10 @@ no_index:
     - inc
 requires:
   DBI: 0
-  Spreadsheet::HTML: 0.39
+  Spreadsheet::HTML: 0.42
   perl: 5.006
 resources:
   bugtracker: https://github.com/jeffa/DBIx-HTML/issues
   homepage: https://github.com/jeffa/DBIx-HTML
   repository: https://github.com/jeffa/DBIx-HTML.git
-version: 0.14
+version: 0.15
