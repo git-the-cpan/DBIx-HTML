@@ -25,4 +25,4 @@ resources:
   bugtracker: https://github.com/jeffa/DBIx-HTML/issues
   homepage: https://github.com/jeffa/DBIx-HTML
   repository: https://github.com/jeffa/DBIx-HTML.git
-version: 1.00
+version: 1.01
