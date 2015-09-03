@@ -1,7 +1,7 @@
 package DBIx::HTML;
 use strict;
 use warnings FATAL => 'all';
-our $VERSION = '0.15';
+our $VERSION = '1.00';
 our $AUTOLOAD;
 
 use DBI;
@@ -28,7 +28,7 @@ sub connect {
     } else {
         # create my own db handle
         eval { $self->{dbh} = DBI->connect( @_ ) };
-        carp $@ and return undef if $@;
+        croak $@ and return undef if $@;
     }
 
     return bless $self, $class;
@@ -38,13 +38,13 @@ sub do {
     my $self = shift;
     my ($sql, $args) = @_;
 
-    carp "can't call do(): no database handle" unless $self->{dbh};
+    croak "can't call do(): no database handle" unless $self->{dbh};
 
     eval {
         $self->{sth} = $self->{dbh}->prepare( $sql );
         $self->{sth}->execute( @$args );
     };
-    carp $@ and return undef if $@;
+    croak $@ and return undef if $@;
 
     $self->{head} = $self->{sth}{NAME};
     $self->{rows} = $self->{sth}->fetchall_arrayref;
@@ -119,8 +119,6 @@ This module uses Spreadsheet::HTML to generate the tables. See
 L<Spreadsheet::HTML> for further documentation on customizing
 the table output.
 
-THIS MODULE IS AN ALPHA RELEASE! Although we are very close to BETA.
-
 =head1 METHODS
 
 =over 4
@@ -151,7 +149,7 @@ any one of the methods provided and supply your own arguments.
 For example, to group table rows into respective <thead>, <tbody>
 and <tfoot> sections:
 
-  print $generator->portrait( tgroups => 1 );
+  print $generator->portrait( tgroups => 2 ); # why 2? answer in the docs!
 
 Or perhaps you want to wrap headings with <td> instead of <th>:
 
@@ -161,7 +159,7 @@ Or have some fun:
 
   print $generator->conway;
 
-See L<Spreadsheet::HTML> for full documentation on these methods and
+See L<Spreadsheet::HTML> for full documentation for these methods and
 the named parameters they accept as arguments.
 
 =head1 SEE ALSO
@@ -174,22 +172,11 @@ The engine for this module.
 
 =item L<DBIx::XHTML_Table>
 
-The predecessor to DBIx::HTML. If you need to generate total
-and subtotal rows, take a look at DBIx::XHTML_Table.
+The predecessor to DBIx::HTML.
 
 =back
 
-=head1 THIS IS AN ALPHA RELEASE.
-
-While most functionality for this module has been completed,
-testing has not. This module has a strong dependency on
-L<Spreadsheet::HTML> which although nearly complete, is also 
-currently an alpha release.
-
-You are encouraged to try my older L<DBIx::XHTML_Table> during
-the development of this module.
-
-=head1 BUGS
+=head1 BUGS AND LIMITATIONS
 
 Please report any bugs or feature requests to
 
@@ -208,15 +195,13 @@ Please report any bugs or feature requests to
 I will be notified, and then you'll automatically be notified of progress
 on your bug as I make changes.
 
-=head1 GITHUB
-
-The Github project is L<https://github.com/jeffa/DBIx-HTML>
-
 =head1 SUPPORT
 
 You can find documentation for this module with the perldoc command.
 
     perldoc DBIx::HTML
+
+The Github project is L<https://github.com/jeffa/DBIx-HTML>
 
 You can also look for information at:
 

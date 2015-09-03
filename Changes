@@ -1,5 +1,10 @@
 Revision history for DBIx-HTML
 
+1.00
+    - replace AUTLOAD with literal subs
+    - replaced carp with croak where applicable
+    - require minimum Spreadsheet::HTML v1.02
+
 0.15
     - more tests (ensure presets work)
     - require minimum Spreadsheet::HTML v0.42
