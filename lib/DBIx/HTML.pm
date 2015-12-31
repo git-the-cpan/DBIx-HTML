@@ -1,7 +1,7 @@
 package DBIx::HTML;
 use strict;
 use warnings FATAL => 'all';
-our $VERSION = '1.01';
+our $VERSION = '1.02';
 our $AUTOLOAD;
 
 use DBI;
@@ -243,7 +243,7 @@ Jeff Anderson, C<< <jeffa at cpan.org> >>
 
 =head1 LICENSE AND COPYRIGHT
 
-Copyright 2015 Jeff Anderson.
+Copyright 2016 Jeff Anderson.
 
 This program is free software; you can redistribute it and/or modify it
 under the terms of the the Artistic License (2.0). You may obtain a
